@@ -1,14 +1,13 @@
-FROM php:7.2.6-apache-stretch
+FROM debian:stretch
 #COPY config/php.ini /usr/local/etc/php/
 
 ENV TZ=America/Argentina/Buenos_Aires
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN apt-get update && apt-get install -y zlib1g-dev \
-    && docker-php-ext-install zip
-
 RUN apt-get install -y \
-  git \
+  apache2 \
+  libapache2-mod-php7 \
+  php7-zip \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
