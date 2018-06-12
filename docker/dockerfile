@@ -1,0 +1,18 @@
+FROM php:7.2.6-apache-stretch
+#COPY config/php.ini /usr/local/etc/php/
+
+ENV APACHE_DOCUMENT_ROOT /var/www/moodle
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+
+ENV TZ=America/Argentina/Buenos_Aires
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN apt-get update && apt-get install -y \
+  git \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN cd /var/www && git clone --branch v3.4.3 https://github.com/moodle/moodle.git
+
+#ENTRYPOINT ["/entrypoint.sh"]
