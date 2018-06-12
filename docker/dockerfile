@@ -11,6 +11,12 @@ RUN apt-get update && apt-get install -y \
   php7.0-pgsql \
   php7.0-zip \
   php7.0-gd \
+  php7.0-curl \
+  php7.0-xml \
+  php7.0-intl \
+  php7.0-mbstring \
+  php7.0-xmlrpc \
+  php7.0-soap \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
@@ -19,6 +25,7 @@ COPY docker/supervisor/apache.conf /etc/supervisor/conf.d/
 COPY docker/apache/30-upload_size.ini /etc/php/7.0/apache2/conf.d/
 
 #RUN cd /var/www && git clone --branch v3.4.3 https://github.com/moodle/moodle.git
+COPY config.php /var/www/moodle-3.4.3/
 ADD v3.4.3.tar.gz /var/www/
 RUN chown www-data:www-data /var/www/moodle-3.4.3
 
